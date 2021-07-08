@@ -1,0 +1,88 @@
+directive @constraint(
+    # String constraints
+    minLength: Int
+    maxLength: Int
+    startsWith: String
+    endsWith: String
+    notContains: String
+    pattern: String
+    format: String
+
+    # Number constraints
+    min: Int
+    max: Int
+    exclusiveMin: Int
+    exclusiveMax: Int
+    multipleOf: Int
+  ) on INPUT_FIELD_DEFINITION
+
+input IntFilter{
+  gt: Int
+  gte: Int
+  lt: Int
+  lte: Int
+  in: Int
+  equals: Int
+  not: Int
+  notIn: Int
+}
+input StringFilter{
+  in: String
+  contains: String
+  not: String
+  notIn: String
+  equals: String
+}
+
+enum Sort {
+  asc
+  desc
+}
+
+
+
+type Query {
+    products(filter: ProductFilter, skip: Int, take: Int, orderBy: ProductOrderByInput, where:String): [Product!]
+    product(id: Int!): Product
+}
+
+type Mutation {
+    createProduct(input: ProductInput): Product
+    updateProduct(id: Int!,input: ProductInput): Product
+    deleteProduct(id: Int!): Product
+}
+
+type Product {
+    id: Int!
+    title: String!
+    description: String!
+    price: Int!
+    company:  String!
+    storage:  Int!
+    image_path: String!
+}
+
+input ProductInput {
+    title: String!
+    description:String!
+    price: Int! 
+    company:  String!
+    storage:  Int!
+    image_path: String!
+}
+
+input ProductFilter {
+    title: StringFilter
+    description: StringFilter
+    price: IntFilter
+    company:  StringFilter
+    storage:  IntFilter
+    image_path: StringFilter
+    AND: [ProductFilter]
+    OR: [ProductFilter]
+}
+
+input ProductOrderByInput {
+    price: Sort
+    storage: Sort
+}
